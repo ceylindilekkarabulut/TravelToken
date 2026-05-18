@@ -5,30 +5,30 @@
 ## Faz 1: Setup & Foundation (Saat 0-6)
 
 ### Repo & Infra
-- [ ] (1) [NAHIDE] Repo oluştur, klasör yapısını scaffold et, ilk commit
-- [ ] (1) [NAHIDE] `.env.example` dosyalarını doldur (backend + frontend)
-- [ ] (1) [NAHIDE] `docker-compose.yml` ile Postgres+Redis ayağa kaldır
-- [ ] (1) [NAHIDE] `pgvector` extension'ı migration'a ekle
-- [ ] (1) [NAHIDE] GitHub remote bağla, branch protection ayarla
+- [x] (1) [NAHIDE] Repo oluştur, klasör yapısını scaffold et, ilk commit
+- [x] (1) [NAHIDE] `.env.example` dosyalarını doldur (backend + frontend)
+- [x] (1) [NAHIDE] `docker-compose.yml` ile Postgres+Redis ayağa kaldır
+- [x] (1) [NAHIDE] `pgvector` extension'ı migration'a ekle
+- [x] (1) [NAHIDE] GitHub remote bağla, branch protection ayarla
 
 ### Backend Bootstrap
-- [ ] (1) [ŞEYMA] FastAPI iskelet (`main.py` + `/health` endpoint)
-- [ ] (1) [ŞEYMA] Pydantic settings (`config.py`) — env var okuma
-- [ ] (1) [ŞEYMA] `structlog` logger setup
-- [ ] (1) [ŞEYMA] `state.py` — TravelState ve agent I/O Pydantic şemaları
-- [ ] (1) [ŞEYMA] OpenAI API key test çağrısı (LLM client)
-- [ ] (1) [ŞEYMA] Amadeus client wrapper iskeleti + auth test
+- [x] (1) [ŞEYMA] FastAPI iskelet (`main.py` + `/health` endpoint)
+- [x] (1) [ŞEYMA] Pydantic settings (`config.py`) — env var okuma
+- [x] (1) [ŞEYMA] `structlog` logger setup
+- [x] (1) [ŞEYMA] `state.py` — TravelState ve agent I/O Pydantic şemaları
+- [x] (1) [ŞEYMA] OpenAI API key test çağrısı (LLM client)
+- [x] (1) [ŞEYMA] Amadeus client wrapper iskeleti + auth test
 
 ### Database
-- [ ] (1) [NAHIDE] SQLAlchemy 2.0 modelleri (`db.py` — 7 tablo)
-- [ ] (1) [NAHIDE] Alembic init, ilk migration, `CREATE EXTENSION vector` ekle
-- [ ] (1) [NAHIDE] Migration'ı çalıştır, tabloları doğrula
+- [x] (1) [NAHIDE] SQLAlchemy 2.0 modelleri (`db.py` — 7 tablo)
+- [x] (1) [NAHIDE] Alembic init, ilk migration, `CREATE EXTENSION vector` ekle
+- [x] (1) [NAHIDE] Migration'ı çalıştır, tabloları doğrula
 
 ### Smart Contract
-- [ ] (1) [NAHIDE] Anchor init, Devnet keypair oluştur, faucet'tan SOL al
-- [ ] (1) [NAHIDE] `state.rs` — TravelGoal + Sponsorship PDA struct'ları
-- [ ] (1) [NAHIDE] `errors.rs` — custom error enum'ları
-- [ ] (1) [NAHIDE] `initialize_goal` instruction'ı + lokal test
+- [x] (1) [NAHIDE] Anchor init, Devnet keypair oluştur, faucet'tan SOL al
+- [x] (1) [NAHIDE] `state.rs` — TravelGoal + Sponsorship PDA struct'ları
+- [x] (1) [NAHIDE] `errors.rs` — custom error enum'ları
+- [x] (1) [NAHIDE] `initialize_goal` instruction'ı + lokal test
 
 ### Frontend Bootstrap
 - [ ] (1) [BEYZANUR] Next.js + Tailwind + shadcn/ui init
@@ -41,37 +41,37 @@
 ## Faz 2: Core Build (Saat 6-20)
 
 ### Backend API
-- [ ] (2) [ŞEYMA] `POST /api/goals/create` endpoint (SSE stream döner)
-- [ ] (2) [ŞEYMA] `GET /api/goals/{id}` endpoint
-- [ ] (2) [ŞEYMA] `GET /api/goals/list?user_wallet=...` endpoint
-- [ ] (2) [ŞEYMA] `POST /api/sponsorships/create` endpoint
-- [ ] (2) [ŞEYMA] `GET /api/routes/search` endpoint (hybrid search)
-- [ ] (2) [ŞEYMA] `POST /api/routes/{id}/copy` endpoint
-- [ ] (2) [ŞEYMA] `WS /ws/notifications/{wallet}` endpoint
-- [ ] (2) [ŞEYMA] `POST /api/agents/approve-purchase` endpoint
+- [x] (2) [ŞEYMA] `POST /api/goals/create` endpoint (SSE stream döner)
+- [x] (2) [ŞEYMA] `GET /api/goals/{id}` endpoint
+- [x] (2) [ŞEYMA] `GET /api/goals/list?user_wallet=...` endpoint
+- [x] (2) [ŞEYMA] `POST /api/sponsorships/create` endpoint
+- [x] (2) [ŞEYMA] `GET /api/routes/search` endpoint (hybrid search)
+- [x] (2) [ŞEYMA] `POST /api/routes/{id}/copy` endpoint
+- [x] (2) [ŞEYMA] `WS /ws/notifications/{wallet}` endpoint
+- [x] (2) [ŞEYMA] `POST /api/agents/approve-purchase` endpoint
 
 ### AI Agents
-- [ ] (2) [ŞEYMA] Rota Ajanı — Google Maps Directions + LLM insight
-- [ ] (2) [ŞEYMA] Rota Ajanı — Pydantic validation + retry
-- [ ] (2) [ŞEYMA] Fırsat Avcısı — Amadeus Flight Offers entegrasyonu
-- [ ] (2) [ŞEYMA] Fırsat Avcısı — Amadeus Hotel Search entegrasyonu
-- [ ] (2) [ŞEYMA] Fırsat Avcısı — Itinerary Price Metrics + LLM yorumlama
-- [ ] (2) [ŞEYMA] Fırsat Avcısı — Redis cache layer (TTL 1 saat)
-- [ ] (2) [ŞEYMA] Bütçe Ajanı — deterministik hesap + country food lookup
-- [ ] (2) [ŞEYMA] Bütçe Ajanı — LLM saving tips üretimi
-- [ ] (2) [ŞEYMA] Master Orchestrator — LangGraph StateGraph
-- [ ] (2) [ŞEYMA] ROUTE + DEAL paralel execution (`asyncio.gather`)
-- [ ] (2) [ŞEYMA] Final report markdown compile (orchestrator prompt)
-- [ ] (2) [ŞEYMA] Agent_logs tablosuna her ajan I/O kaydı
+- [x] (2) [ŞEYMA] Rota Ajanı — Google Maps Directions + LLM insight
+- [x] (2) [ŞEYMA] Rota Ajanı — Pydantic validation + retry
+- [x] (2) [ŞEYMA] Fırsat Avcısı — Amadeus Flight Offers entegrasyonu
+- [x] (2) [ŞEYMA] Fırsat Avcısı — Amadeus Hotel Search entegrasyonu
+- [x] (2) [ŞEYMA] Fırsat Avcısı — Itinerary Price Metrics + LLM yorumlama
+- [x] (2) [ŞEYMA] Fırsat Avcısı — Redis cache layer (TTL 1 saat)
+- [x] (2) [ŞEYMA] Bütçe Ajanı — deterministik hesap + country food lookup
+- [x] (2) [ŞEYMA] Bütçe Ajanı — LLM saving tips üretimi
+- [x] (2) [ŞEYMA] Master Orchestrator — LangGraph StateGraph
+- [x] (2) [ŞEYMA] ROUTE + DEAL paralel execution (`asyncio.gather`)
+- [x] (2) [ŞEYMA] Final report markdown compile (orchestrator prompt)
+- [x] (2) [ŞEYMA] Agent_logs tablosuna her ajan I/O kaydı
 
 ### Vector Search
-- [ ] (2) [NAHIDE] `embedding_service.py` — text-embedding-3-small wrapper
-- [ ] (2) [NAHIDE] Hybrid search query (vector + filter + re-rank)
-- [ ] (2) [NAHIDE] HNSW index optimize parametreleri
+- [x] (2) [NAHIDE] `embedding_service.py` — text-embedding-3-small wrapper
+- [x] (2) [NAHIDE] Hybrid search query (vector + filter + re-rank)
+- [x] (2) [NAHIDE] HNSW index optimize parametreleri
 
 ### SSE Streaming
-- [ ] (2) [ŞEYMA] LangGraph stream → SSE event mapping
-- [ ] (2) [ŞEYMA] SSE event tipleri (agent_start, complete, error, done)
+- [x] (2) [ŞEYMA] LangGraph stream → SSE event mapping
+- [x] (2) [ŞEYMA] SSE event tipleri (agent_start, complete, error, done)
 
 ### Smart Contract
 - [ ] (2) [NAHIDE] `sponsor` instruction + Sponsorship PDA oluşturma
