@@ -1,8 +1,10 @@
 import json
+import asyncio
 from pathlib import Path
 from solders.keypair import Keypair
 from solders.rpc.responses import GetAccountInfoResp
 from solana.rpc.async_api import AsyncClient
+from solana.rpc.websocket_api import connect
 
 from app.config import settings
 from app.utils.logger import get_logger
@@ -13,6 +15,7 @@ PROGRAM_ID = "Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS"
 
 _client: AsyncClient | None = None
 _authority_keypair: Keypair | None = None
+_event_listeners: dict[str, list] = {}
 
 
 async def get_rpc_client() -> AsyncClient:
@@ -93,6 +96,68 @@ async def refund_sponsors(goal_pda: str) -> str:
         raise
 
 
+async def subscribe_to_goal_events(goal_pda: str, callback) -> None:
+    """Subscribe to GoalFunded and GoalReleased events for a specific goal PDA."""
+    try:
+        ws_url = settings.solana_rpc_url.replace("https://", "wss://")
+
+        async with connect(ws_url) as websocket:
+            logger.info("event_listener_connected", goal_pda=goal_pda)
+
+            _event_listeners[goal_pda] = [websocket, callback]
+
+            while goal_pda in _event_listeners:
+                try:
+                    message = await asyncio.wait_for(
+                        websocket.recv(), timeout=60.0
+                    )
+
+                    if isinstance(message, str):
+                        event_data = json.loads(message)
+
+                        if "params" in event_data and "result" in event_data["params"]:
+                            result = event_data["params"]["result"]
+
+                            if "value" in result and "logs" in result["value"]:
+                                logs = result["value"]["logs"]
+
+                                for log in logs:
+                                    if "GoalFunded" in log:
+                                        await callback({
+                                            "event": "GoalFunded",
+                                            "goal_pda": goal_pda,
+                                            "log": log
+                                        })
+                                    elif "GoalReleased" in log:
+                                        await callback({
+                                            "event": "GoalReleased",
+                                            "goal_pda": goal_pda,
+                                            "log": log
+                                        })
+                except asyncio.TimeoutError:
+                    logger.debug("event_listener_timeout", goal_pda=goal_pda)
+                    continue
+                except Exception as e:
+                    logger.error("event_listener_error", error=str(e), goal_pda=goal_pda)
+                    break
+    except Exception as e:
+        logger.error("subscribe_to_goal_events_error", error=str(e), goal_pda=goal_pda)
+    finally:
+        if goal_pda in _event_listeners:
+            del _event_listeners[goal_pda]
+        logger.info("event_listener_disconnected", goal_pda=goal_pda)
+
+
+def unsubscribe_from_goal_events(goal_pda: str) -> None:
+    """Unsubscribe from events for a specific goal."""
+    if goal_pda in _event_listeners:
+        try:
+            del _event_listeners[goal_pda]
+            logger.info("event_listener_unsubscribed", goal_pda=goal_pda)
+        except Exception as e:
+            logger.error("unsubscribe_error", error=str(e), goal_pda=goal_pda)
+
+
 async def _get_pda(seed: bytes) -> tuple:
     from solders.pubkey import Pubkey
 
@@ -103,4 +168,5 @@ async def _get_pda(seed: bytes) -> tuple:
     except Exception as e:
         logger.error("pda_derivation_error", error=str(e))
         raise
+
 

@@ -1,0 +1,234 @@
+{
+  "version": "0.1.0",
+  "name": "travel_escrow",
+  "instructions": [
+    {
+      "name": "initializeGoal",
+      "accounts": [
+        {
+          "name": "travelGoal",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "traveler",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "goalId",
+          "type": "string"
+        },
+        {
+          "name": "targetLamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "sponsor",
+      "accounts": [
+        {
+          "name": "travelGoal",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sponsorship",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sponsor",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amountLamports",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "releaseFunds",
+      "accounts": [
+        {
+          "name": "travelGoal",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "traveler",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "refundSponsor",
+      "accounts": [
+        {
+          "name": "travelGoal",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sponsorship",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "sponsor",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "TravelGoal",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "goalId",
+            "type": "string"
+          },
+          {
+            "name": "traveler",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
+          },
+          {
+            "name": "targetLamports",
+            "type": "u64"
+          },
+          {
+            "name": "fundedLamports",
+            "type": "u64"
+          },
+          {
+            "name": "released",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sponsorship",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "goal",
+            "type": "publicKey"
+          },
+          {
+            "name": "sponsor",
+            "type": "publicKey"
+          },
+          {
+            "name": "amountLamports",
+            "type": "u64"
+          },
+          {
+            "name": "refunded",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "GoalFunded",
+      "fields": [
+        {
+          "name": "goal",
+          "type": "publicKey"
+        },
+        {
+          "name": "totalFunded",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "GoalReleased",
+      "fields": [
+        {
+          "name": "goal",
+          "type": "publicKey"
+        },
+        {
+          "name": "traveler",
+          "type": "publicKey"
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "AlreadyReleased",
+      "msg": "Goal funds have already been released"
+    },
+    {
+      "code": 6001,
+      "name": "Unauthorized",
+      "msg": "Unauthorized access"
+    },
+    {
+      "code": 6002,
+      "name": "AlreadyRefunded",
+      "msg": "Sponsorship already refunded"
+    }
+  ]
+}
