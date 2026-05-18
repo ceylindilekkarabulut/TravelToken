@@ -74,18 +74,18 @@
 - [x] (2) [ŞEYMA] SSE event tipleri (agent_start, complete, error, done)
 
 ### Smart Contract
-- [ ] (2) [NAHIDE] `sponsor` instruction + Sponsorship PDA oluşturma
-- [ ] (2) [NAHIDE] `release_funds` instruction (backend authority)
-- [ ] (2) [NAHIDE] `refund_sponsor` instruction
-- [ ] (2) [NAHIDE] `emit!` events (GoalFunded, GoalReleased)
-- [ ] (2) [NAHIDE] Anchor IDL export (frontend için)
+- [x] (2) [NAHIDE] `sponsor` instruction + Sponsorship PDA oluşturma
+- [x] (2) [NAHIDE] `release_funds` instruction (backend authority)
+- [x] (2) [NAHIDE] `refund_sponsor` instruction
+- [x] (2) [NAHIDE] `emit!` events (GoalFunded, GoalReleased)
+- [x] (2) [NAHIDE] Anchor IDL export (frontend için)
 - [ ] (2) [NAHIDE] Devnet deploy, program ID kayıt
 
 ### Solana Service (Python)
-- [ ] (2) [NAHIDE] `solana_service.py` — RPC wrapper
-- [ ] (2) [NAHIDE] `initialize_goal` backend'den çağırma
-- [ ] (2) [NAHIDE] `release_funds` backend'den çağırma
-- [ ] (2) [NAHIDE] Solana event listener (WebSocket subscription)
+- [x] (2) [NAHIDE] `solana_service.py` — RPC wrapper
+- [x] (2) [NAHIDE] `initialize_goal` backend'den çağırma
+- [x] (2) [NAHIDE] `release_funds` backend'den çağırma
+- [x] (2) [NAHIDE] Solana event listener (WebSocket subscription)
 
 ### Frontend Pages
 - [ ] (2) [BEYZANUR] Landing page (`/`) — trending goals feed
