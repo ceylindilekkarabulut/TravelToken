@@ -5,7 +5,7 @@
 ## Faz 1: Setup & Foundation (Saat 0-6)
 
 ### Repo & Infra
-- [ ] (1) [NAHIDE] Repo oluştur, klasör yapısını scaffold et, ilk commit
+- [X] (1) [NAHIDE] Repo oluştur, klasör yapısını scaffold et, ilk commit
 - [ ] (1) [NAHIDE] `.env.example` dosyalarını doldur (backend + frontend)
 - [ ] (1) [NAHIDE] `docker-compose.yml` ile Postgres+Redis ayağa kaldır
 - [ ] (1) [NAHIDE] `pgvector` extension'ı migration'a ekle
