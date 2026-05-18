@@ -27,7 +27,7 @@ async def create_goal(body: GoalCreateRequest, db: AsyncSession = Depends(get_db
     await db.commit()
 
     return StreamingResponse(
-        run_goal_pipeline(goal_id, body),
+        run_goal_pipeline(goal_id, body, db),
         media_type="text/event-stream",
     )
 

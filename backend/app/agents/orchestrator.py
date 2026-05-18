@@ -2,10 +2,13 @@ import asyncio
 import json
 from typing import AsyncGenerator
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.agents.state import TravelState
 from app.agents.route_agent import run_route_agent
 from app.agents.deal_hunter_agent import run_deal_hunter_agent
 from app.agents.budget_agent import run_budget_agent
+from app.agents.logging_utils import record_agent_execution
 from app.models.schemas import GoalCreateRequest
 from app.utils.logger import get_logger
 
@@ -16,7 +19,9 @@ def _sse(event: str, data: dict) -> str:
     return f"event: {event}\ndata: {json.dumps(data)}\n\n"
 
 
-async def run_goal_pipeline(goal_id: str, body: GoalCreateRequest) -> AsyncGenerator[str, None]:
+async def run_goal_pipeline(
+    goal_id: str, body: GoalCreateRequest, db: AsyncSession
+) -> AsyncGenerator[str, None]:
     state: TravelState = {
         "goal_id": goal_id,
         "origin": body.origin,
@@ -35,8 +40,12 @@ async def run_goal_pipeline(goal_id: str, body: GoalCreateRequest) -> AsyncGener
     yield _sse("agent_start", {"agent": "route", "goal_id": goal_id})
     yield _sse("agent_start", {"agent": "deal_hunter", "goal_id": goal_id})
 
-    route_task = asyncio.create_task(run_route_agent(state))
-    deal_task = asyncio.create_task(run_deal_hunter_agent(state))
+    route_task = asyncio.create_task(
+        record_agent_execution(goal_id, "route", state, run_route_agent, db)
+    )
+    deal_task = asyncio.create_task(
+        record_agent_execution(goal_id, "deal_hunter", state, run_deal_hunter_agent, db)
+    )
 
     route_result, deal_result = await asyncio.gather(route_task, deal_task)
     state["route_result"] = route_result
@@ -46,9 +55,13 @@ async def run_goal_pipeline(goal_id: str, body: GoalCreateRequest) -> AsyncGener
     yield _sse("agent_complete", {"agent": "deal_hunter", "data": deal_result})
 
     yield _sse("agent_start", {"agent": "budget", "goal_id": goal_id})
-    budget_result = await run_budget_agent(state)
+    budget_result = await record_agent_execution(
+        goal_id, "budget", state, run_budget_agent, db
+    )
     state["budget_result"] = budget_result
     yield _sse("agent_complete", {"agent": "budget", "data": budget_result})
+
+    await db.commit()
 
     final_report = _compile_report(state)
     state["final_report_md"] = final_report
