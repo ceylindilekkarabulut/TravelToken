@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import String, Float, Text, DateTime, ForeignKey, Integer, Boolean
+from sqlalchemy import String, Float, Text, DateTime, ForeignKey, Integer, Boolean, JSON
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from pgvector.sqlalchemy import Vector
 
@@ -80,3 +80,25 @@ class PriceHistory(Base):
     recorded_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     goal: Mapped["TravelGoal"] = relationship(back_populates="price_history")
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    wallet_address: Mapped[str] = mapped_column(String, primary_key=True)
+    display_name: Mapped[str | None] = mapped_column(String, nullable=True)
+    avatar_url: Mapped[str | None] = mapped_column(String, nullable=True)
+    total_sponsored_sol: Mapped[float] = mapped_column(Float, default=0.0)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class NotificationSubscription(Base):
+    __tablename__ = "notification_subscriptions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    wallet_address: Mapped[str] = mapped_column(String, index=True)
+    event_type: Mapped[str] = mapped_column(String)
+    metadata: Mapped[dict] = mapped_column(JSON, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
