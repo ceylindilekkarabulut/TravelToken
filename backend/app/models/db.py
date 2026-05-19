@@ -99,6 +99,6 @@ class NotificationSubscription(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     wallet_address: Mapped[str] = mapped_column(String, index=True)
     event_type: Mapped[str] = mapped_column(String)
-    metadata: Mapped[dict] = mapped_column(JSON, nullable=True)
+    meta_data: Mapped[dict] = mapped_column("sub_metadata", JSON, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
