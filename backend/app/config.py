@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
 
     openai_api_key: str = ""
+    gemini_api_key: str = ""
     amadeus_client_id: str = ""
     amadeus_client_secret: str = ""
     google_maps_api_key: str = ""

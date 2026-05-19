@@ -1,13 +1,10 @@
 import uuid
-import asyncio
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import select
+from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_db
-from app.api.routes.websocket import push_notification
 from app.models.schemas import SponsorshipCreateRequest, SponsorshipResponse
-from app.models.db import Sponsorship, TravelGoal
+from app.models.db import Sponsorship
 
 router = APIRouter()
 
@@ -24,26 +21,4 @@ async def create_sponsorship(body: SponsorshipCreateRequest, db: AsyncSession = 
     db.add(sponsorship)
     await db.commit()
     await db.refresh(sponsorship)
-
-    goal = await db.get(TravelGoal, body.goal_id)
-    if goal:
-        asyncio.create_task(
-            push_notification(
-                goal.user_wallet,
-                {
-                    "type": "sponsorship",
-                    "message": f"{body.amount_sol} SOL sponsorluk alındı: {goal.origin} → {goal.destination}",
-                },
-            )
-        )
-
     return sponsorship
-
-
-@router.get("/{goal_id}", response_model=list[SponsorshipResponse])
-async def get_sponsorships(goal_id: str, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(Sponsorship).where(Sponsorship.goal_id == goal_id).order_by(Sponsorship.created_at.desc()))
-    sponsorships = result.scalars().all()
-    if sponsorships is None:
-        raise HTTPException(status_code=404, detail="Goal not found or no sponsorships")
-    return sponsorships
