@@ -6,10 +6,10 @@
 
 ### Repo & Infra
 - [X] (1) [NAHIDE] Repo oluştur, klasör yapısını scaffold et, ilk commit
-- [ ] (1) [NAHIDE] `.env.example` dosyalarını doldur (backend + frontend)
-- [ ] (1) [NAHIDE] `docker-compose.yml` ile Postgres+Redis ayağa kaldır
-- [ ] (1) [NAHIDE] `pgvector` extension'ı migration'a ekle
-- [ ] (1) [NAHIDE] GitHub remote bağla, branch protection ayarla
+- [X] (1) [NAHIDE] `.env.example` dosyalarını doldur (backend + frontend)
+- [X] (1) [NAHIDE] `docker-compose.yml` ile Postgres+Redis ayağa kaldır
+- [X] (1) [NAHIDE] `pgvector` extension'ı migration'a ekle
+- [X] (1) [NAHIDE] GitHub remote bağla, branch protection ayarla
 
 ### Backend Bootstrap
 - [ ] (1) [ŞEYMA] FastAPI iskelet (`main.py` + `/health` endpoint)
@@ -20,15 +20,15 @@
 - [ ] (1) [ŞEYMA] Amadeus client wrapper iskeleti + auth test
 
 ### Database
-- [ ] (1) [NAHIDE] SQLAlchemy 2.0 modelleri (`db.py` — 7 tablo)
-- [ ] (1) [NAHIDE] Alembic init, ilk migration, `CREATE EXTENSION vector` ekle
-- [ ] (1) [NAHIDE] Migration'ı çalıştır, tabloları doğrula
+- [X] (1) [NAHIDE] SQLAlchemy 2.0 modelleri (`db.py` — 7 tablo)
+- [X] (1) [NAHIDE] Alembic init, ilk migration, `CREATE EXTENSION vector` ekle
+- [X] (1) [NAHIDE] Migration'ı çalıştır, tabloları doğrula
 
 ### Smart Contract
-- [ ] (1) [NAHIDE] Anchor init, Devnet keypair oluştur, faucet'tan SOL al
-- [ ] (1) [NAHIDE] `state.rs` — TravelGoal + Sponsorship PDA struct'ları
-- [ ] (1) [NAHIDE] `errors.rs` — custom error enum'ları
-- [ ] (1) [NAHIDE] `initialize_goal` instruction'ı + lokal test
+- [X] (1) [NAHIDE] Anchor init, Devnet keypair oluştur, faucet'tan SOL al
+- [X] (1) [NAHIDE] `state.rs` — TravelGoal + Sponsorship PDA struct'ları
+- [X] (1) [NAHIDE] `errors.rs` — custom error enum'ları
+- [X] (1) [NAHIDE] `initialize_goal` instruction'ı + lokal test
 
 ### Frontend Bootstrap
 - [ ] (1) [BEYZANUR] Next.js + Tailwind + shadcn/ui init
