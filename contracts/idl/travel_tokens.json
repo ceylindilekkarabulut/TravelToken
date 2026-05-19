@@ -1,0 +1,250 @@
+{
+  "address": "DwST5QFBTxW1HEo3bi9qiCHb89usjxiofpncPGEr1pD",
+  "metadata": {
+    "name": "travel_tokens",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Throne-Travel escrow program for student travel funding"
+  },
+  "instructions": [
+    {
+      "name": "initialize_goal",
+      "discriminator": [251, 102, 196, 80, 220, 198, 113, 159],
+      "accounts": [
+        {
+          "name": "goal",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [103, 111, 97, 108] },
+              { "kind": "account", "path": "user" },
+              { "kind": "arg", "path": "goal_uuid" }
+            ]
+          }
+        },
+        { "name": "user", "writable": true, "signer": true },
+        { "name": "system_program", "address": "11111111111111111111111111111111" }
+      ],
+      "args": [
+        { "name": "goal_uuid", "type": { "array": ["u8", 16] } },
+        { "name": "target_amount", "type": "u64" },
+        { "name": "deadline", "type": "i64" }
+      ]
+    },
+    {
+      "name": "sponsor",
+      "discriminator": [194, 162, 175, 156, 56, 19, 51, 110],
+      "accounts": [
+        {
+          "name": "goal",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [103, 111, 97, 108] },
+              { "kind": "account", "path": "goal.owner", "account": "TravelGoal" },
+              { "kind": "account", "path": "goal.goal_uuid", "account": "TravelGoal" }
+            ]
+          }
+        },
+        {
+          "name": "sponsorship",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [115, 112, 111, 110, 115, 111, 114] },
+              { "kind": "account", "path": "goal" },
+              { "kind": "account", "path": "sponsor" },
+              { "kind": "arg", "path": "nonce" }
+            ]
+          }
+        },
+        { "name": "sponsor", "writable": true, "signer": true },
+        { "name": "system_program", "address": "11111111111111111111111111111111" }
+      ],
+      "args": [
+        { "name": "nonce", "type": "u64" },
+        { "name": "amount", "type": "u64" }
+      ]
+    },
+    {
+      "name": "release_funds",
+      "discriminator": [225, 88, 91, 108, 126, 52, 2, 70],
+      "accounts": [
+        {
+          "name": "goal",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [103, 111, 97, 108] },
+              { "kind": "account", "path": "goal.owner", "account": "TravelGoal" },
+              { "kind": "account", "path": "goal.goal_uuid", "account": "TravelGoal" }
+            ]
+          }
+        },
+        { "name": "merchant", "writable": true },
+        { "name": "authority", "signer": true }
+      ],
+      "args": []
+    },
+    {
+      "name": "refund_sponsor",
+      "discriminator": [99, 234, 165, 47, 22, 211, 191, 195],
+      "accounts": [
+        {
+          "name": "goal",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              { "kind": "const", "value": [103, 111, 97, 108] },
+              { "kind": "account", "path": "goal.owner", "account": "TravelGoal" },
+              { "kind": "account", "path": "goal.goal_uuid", "account": "TravelGoal" }
+            ]
+          }
+        },
+        {
+          "name": "sponsorship",
+          "writable": true
+        },
+        { "name": "sponsor", "writable": true, "signer": true }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "TravelGoal",
+      "discriminator": [197, 88, 49, 56, 232, 224, 41, 173]
+    },
+    {
+      "name": "Sponsorship",
+      "discriminator": [202, 99, 220, 80, 22, 110, 39, 178]
+    }
+  ],
+  "events": [
+    {
+      "name": "GoalInitialized",
+      "discriminator": [78, 188, 121, 51, 31, 224, 197, 113]
+    },
+    {
+      "name": "SponsorshipCreated",
+      "discriminator": [217, 109, 224, 91, 99, 187, 4, 70]
+    },
+    {
+      "name": "GoalFunded",
+      "discriminator": [16, 86, 50, 187, 132, 110, 218, 219]
+    },
+    {
+      "name": "FundsReleased",
+      "discriminator": [89, 105, 71, 245, 245, 247, 122, 161]
+    },
+    {
+      "name": "SponsorRefunded",
+      "discriminator": [137, 22, 175, 220, 35, 99, 188, 246]
+    }
+  ],
+  "errors": [
+    { "code": 6000, "name": "InvalidAmount", "msg": "Hedef tutar 0'dan büyük olmalı" },
+    { "code": 6001, "name": "DeadlineInPast", "msg": "Deadline geçmiş bir tarih olamaz" },
+    { "code": 6002, "name": "GoalNotActive", "msg": "Hedef şu anda aktif değil" },
+    { "code": 6003, "name": "DeadlinePassed", "msg": "Deadline geçti, sponsorluk kabul edilmiyor" },
+    { "code": 6004, "name": "DeadlineNotPassed", "msg": "Deadline henüz geçmedi, refund yapılamaz" },
+    { "code": 6005, "name": "GoalNotFunded", "msg": "Hedef tutara ulaşılmadı" },
+    { "code": 6006, "name": "NoFundsToRelease", "msg": "Serbest bırakılacak fon yok" },
+    { "code": 6007, "name": "AlreadyReleased", "msg": "Fonlar zaten serbest bırakılmış" },
+    { "code": 6008, "name": "AlreadyRefunded", "msg": "Bu sponsorluk zaten iade edilmiş" },
+    { "code": 6009, "name": "Unauthorized", "msg": "Yetkisiz erişim" },
+    { "code": 6010, "name": "ArithmeticOverflow", "msg": "Aritmetik taşma" }
+  ],
+  "types": [
+    {
+      "name": "TravelGoal",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "owner", "type": "pubkey" },
+          { "name": "goal_uuid", "type": { "array": ["u8", 16] } },
+          { "name": "target_amount", "type": "u64" },
+          { "name": "current_amount", "type": "u64" },
+          { "name": "deadline", "type": "i64" },
+          { "name": "status", "type": "u8" },
+          { "name": "sponsor_count", "type": "u32" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    },
+    {
+      "name": "Sponsorship",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "goal", "type": "pubkey" },
+          { "name": "sponsor", "type": "pubkey" },
+          { "name": "amount", "type": "u64" },
+          { "name": "timestamp", "type": "i64" },
+          { "name": "refunded", "type": "bool" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    },
+    {
+      "name": "GoalInitialized",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "goal", "type": "pubkey" },
+          { "name": "owner", "type": "pubkey" },
+          { "name": "target_amount", "type": "u64" },
+          { "name": "deadline", "type": "i64" }
+        ]
+      }
+    },
+    {
+      "name": "SponsorshipCreated",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "goal", "type": "pubkey" },
+          { "name": "sponsor", "type": "pubkey" },
+          { "name": "amount", "type": "u64" },
+          { "name": "timestamp", "type": "i64" }
+        ]
+      }
+    },
+    {
+      "name": "GoalFunded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "goal", "type": "pubkey" },
+          { "name": "final_amount", "type": "u64" },
+          { "name": "sponsor_count", "type": "u32" },
+          { "name": "timestamp", "type": "i64" }
+        ]
+      }
+    },
+    {
+      "name": "FundsReleased",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "goal", "type": "pubkey" },
+          { "name": "merchant", "type": "pubkey" },
+          { "name": "amount", "type": "u64" },
+          { "name": "timestamp", "type": "i64" }
+        ]
+      }
+    },
+    {
+      "name": "SponsorRefunded",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "goal", "type": "pubkey" },
+          { "name": "sponsor", "type": "pubkey" },
+          { "name": "amount", "type": "u64" },
+          { "name": "timestamp", "type": "i64" }
+        ]
+      }
+    }
+  ]
+}
