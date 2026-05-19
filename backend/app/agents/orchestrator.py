@@ -38,21 +38,18 @@ async def run_goal_pipeline(
     }
 
     yield _sse("agent_start", {"agent": "route", "goal_id": goal_id})
-    yield _sse("agent_start", {"agent": "deal_hunter", "goal_id": goal_id})
+    await asyncio.sleep(0.5)
 
-    route_task = asyncio.create_task(
-        record_agent_execution(goal_id, "route", state, run_route_agent, db)
-    )
-    deal_task = asyncio.create_task(
-        record_agent_execution(goal_id, "deal_hunter", state, run_deal_hunter_agent, db)
-    )
-
-    route_result, deal_result = await asyncio.gather(route_task, deal_task)
+    route_result = await record_agent_execution(goal_id, "route", state, run_route_agent, db)
     state["route_result"] = route_result
-    state["deal_result"] = deal_result
-
     yield _sse("agent_complete", {"agent": "route", "data": route_result})
+    await asyncio.sleep(0.5)
+
+    yield _sse("agent_start", {"agent": "deal_hunter", "goal_id": goal_id})
+    deal_result = await record_agent_execution(goal_id, "deal_hunter", state, run_deal_hunter_agent, db)
+    state["deal_result"] = deal_result
     yield _sse("agent_complete", {"agent": "deal_hunter", "data": deal_result})
+    await asyncio.sleep(0.5)
 
     yield _sse("agent_start", {"agent": "budget", "goal_id": goal_id})
     budget_result = await record_agent_execution(
@@ -60,6 +57,7 @@ async def run_goal_pipeline(
     )
     state["budget_result"] = budget_result
     yield _sse("agent_complete", {"agent": "budget", "data": budget_result})
+    await asyncio.sleep(0.5)
 
     await db.commit()
 
@@ -77,13 +75,13 @@ def _compile_report(state: TravelState) -> str:
     return f"""# Travel Plan: {state['origin']} → {state['destination']}
 
 ## Route Overview
-{route.get('summary', 'N/A')}
+{route.get('summary', 'Route analysis in progress...')}
 
 ## Best Deals Found
-- **Flight**: {deal.get('best_flight', 'N/A')}
-- **Hotel**: {deal.get('best_hotel', 'N/A')}
+- **Flight**: {deal.get('best_flight', 'Searching for flights...')}
+- **Hotel**: {deal.get('best_hotel', 'Searching for hotels...')}
 
 ## Budget Breakdown
-- Total Estimated: ${budget.get('total_usd', 'N/A')}
-- Savings Tips: {budget.get('tips', '')}
+- Total Estimated: ${budget.get('total_usd', 'Calculating...')}
+- Savings Tips: {budget.get('tips', 'Getting AI recommendations...')}
 """
