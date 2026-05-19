@@ -87,7 +87,7 @@ def upgrade() -> None:
         sa.Column('description_md', sa.Text(), nullable=False),
         sa.Column('tags', sa.String(), nullable=False),
         sa.Column('copy_count', sa.Integer(), nullable=False, server_default='0'),
-        sa.Column('embedding', Vector(1536), nullable=True),
+        sa.Column('embedding', Vector(768), nullable=True),
         sa.Column('creator_wallet', sa.String(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint('id')
@@ -113,7 +113,7 @@ def upgrade() -> None:
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('wallet_address', sa.String(), nullable=False),
         sa.Column('event_type', sa.String(), nullable=False),
-        sa.Column('meta_data', sa.JSON(), nullable=True),
+        sa.Column('metadata', sa.JSON(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=False),
         sa.PrimaryKeyConstraint('id'),
         sa.Index('ix_notification_subscriptions_wallet_address', 'wallet_address')
