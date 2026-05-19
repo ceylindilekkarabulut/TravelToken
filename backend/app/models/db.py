@@ -64,7 +64,7 @@ class Route(Base):
     description_md: Mapped[str] = mapped_column(Text)
     tags: Mapped[str] = mapped_column(String)
     copy_count: Mapped[int] = mapped_column(Integer, default=0)
-    embedding: Mapped[list[float]] = mapped_column(Vector(1536), nullable=True)
+    embedding: Mapped[list[float]] = mapped_column(Vector(768), nullable=True)
     creator_wallet: Mapped[str | None] = mapped_column(String, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
