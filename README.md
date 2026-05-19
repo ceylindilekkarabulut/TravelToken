@@ -1,180 +1,199 @@
-# Throne-Travel — Hackathon'26 Görev Takibi
+# Throne Travel
 
-> Format: `[ ] (Adım X) [DEV] Görev açıklaması`
+**AI destekli seyahat planlama, Solana blockchain escrow ve topluluk sponsorluğu**
 
-## Faz 1: Setup & Foundation (Saat 0-6)
+---
 
-### Repo & Infra
-- [x] (1) [NAHIDE] Repo oluştur, klasör yapısını scaffold et, ilk commit
-- [x] (1) [NAHIDE] `.env.example` dosyalarını doldur (backend + frontend)
-- [x] (1) [NAHIDE] `docker-compose.yml` ile Postgres+Redis ayağa kaldır
-- [x] (1) [NAHIDE] `pgvector` extension'ı migration'a ekle
-- [x] (1) [NAHIDE] GitHub remote bağla, branch protection ayarla
+## 🎯 Vizyon
 
-### Backend Bootstrap
-- [x] (1) [ŞEYMA] FastAPI iskelet (`main.py` + `/health` endpoint)
-- [x] (1) [ŞEYMA] Pydantic settings (`config.py`) — env var okuma
-- [x] (1) [ŞEYMA] `structlog` logger setup
-- [x] (1) [ŞEYMA] `state.py` — TravelState ve agent I/O Pydantic şemaları
-- [x] (1) [ŞEYMA] OpenAI API key test çağrısı (LLM client)
-- [x] (1) [ŞEYMA] Amadeus client wrapper iskeleti + auth test
+Gezginlerin hayallerindeki seyahatleri kitle fonlaması ile gerçekleştirmelerini sağlamak, aynı zamanda AI destekli seyahat planlama almalarını sunmak. Topluluk sponsorları Solana escrow aracılığıyla fon sağlar; AI ajanları rotaları optimize eder, en iyi fırsatları bulur ve bütçeyi yönetir—her şey şeffaf ve merkezi olmayan şekilde.
 
-### Database
-- [x] (1) [NAHIDE] SQLAlchemy 2.0 modelleri (`db.py` — 7 tablo)
-- [x] (1) [NAHIDE] Alembic init, ilk migration, `CREATE EXTENSION vector` ekle
-- [x] (1) [NAHIDE] Migration'ı çalıştır, tabloları doğrula
+---
 
-### Smart Contract
-- [x] (1) [NAHIDE] Anchor init, Devnet keypair oluştur, faucet'tan SOL al
-- [x] (1) [NAHIDE] `state.rs` — TravelGoal + Sponsorship PDA struct'ları
-- [x] (1) [NAHIDE] `errors.rs` — custom error enum'ları
-- [x] (1) [NAHIDE] `initialize_goal` instruction'ı + lokal test
+## ✅ MVP Durumu: FAZ 2 TAMAMLANDI
 
-### Frontend Bootstrap
-- [ ] (1) [BEYZANUR] Next.js + Tailwind + shadcn/ui init
-- [ ] (1) [BEYZANUR] `layout.tsx` + dark mode default
-- [ ] (1) [BEYZANUR] `Navbar.tsx` + logo + arama input
-- [ ] (1) [BEYZANUR] Solana Wallet Adapter context provider
-- [ ] (1) [BEYZANUR] `WalletButton.tsx` (Phantom connect/disconnect)
-- [ ] (1) [BEYZANUR] Tasarım tokenları (renkler, font) `tailwind.config.ts`'e
+### Geliştirilen Temel Özellikler
+- ✅ **FastAPI Backend** gerçek zamanlı SSE streaming ile
+- ✅ **3 AI Ajanı** (Rota Planlayıcı, Fırsat Avcısı, Bütçe Optimizatörü)
+- ✅ **Hibrit Vektör Arama** pgvector ile (semantik + anahtar kelime)
+- ✅ **Ajan Çalıştırma Kaydı** (zamanlama, I/O takibi)
+- ✅ **Solana Akıllı Kontratı** (4 talimat + olay yayınlama)
+- ✅ **PostgreSQL Veritabanı** (6 tablo + migrasyonlar)
+- ✅ **Next.js Frontend** (responsive UI + API entegrasyonu)
+- ✅ **Gerçek Zamanlı Hedef Oluşturma** streaming yanıtları ile
 
-## Faz 2: Core Build (Saat 6-20)
+---
 
-### Backend API
-- [x] (2) [ŞEYMA] `POST /api/goals/create` endpoint (SSE stream döner)
-- [x] (2) [ŞEYMA] `GET /api/goals/{id}` endpoint
-- [x] (2) [ŞEYMA] `GET /api/goals/list?user_wallet=...` endpoint
-- [x] (2) [ŞEYMA] `POST /api/sponsorships/create` endpoint
-- [x] (2) [ŞEYMA] `GET /api/routes/search` endpoint (hybrid search)
-- [x] (2) [ŞEYMA] `POST /api/routes/{id}/copy` endpoint
-- [x] (2) [ŞEYMA] `WS /ws/notifications/{wallet}` endpoint
-- [x] (2) [ŞEYMA] `POST /api/agents/approve-purchase` endpoint
+## 🚀 Hızlı Başlangıç
 
-### AI Agents
-- [x] (2) [ŞEYMA] Rota Ajanı — Google Maps Directions + LLM insight
-- [x] (2) [ŞEYMA] Rota Ajanı — Pydantic validation + retry
-- [x] (2) [ŞEYMA] Fırsat Avcısı — Amadeus Flight Offers entegrasyonu
-- [x] (2) [ŞEYMA] Fırsat Avcısı — Amadeus Hotel Search entegrasyonu
-- [x] (2) [ŞEYMA] Fırsat Avcısı — Itinerary Price Metrics + LLM yorumlama
-- [x] (2) [ŞEYMA] Fırsat Avcısı — Redis cache layer (TTL 1 saat)
-- [x] (2) [ŞEYMA] Bütçe Ajanı — deterministik hesap + country food lookup
-- [x] (2) [ŞEYMA] Bütçe Ajanı — LLM saving tips üretimi
-- [x] (2) [ŞEYMA] Master Orchestrator — LangGraph StateGraph
-- [x] (2) [ŞEYMA] ROUTE + DEAL paralel execution (`asyncio.gather`)
-- [x] (2) [ŞEYMA] Final report markdown compile (orchestrator prompt)
-- [x] (2) [ŞEYMA] Agent_logs tablosuna her ajan I/O kaydı
+### Ön Koşullar
+- Docker & Docker Compose
+- Node.js 18+
+- Python 3.10+
 
-### Vector Search
-- [x] (2) [NAHIDE] `embedding_service.py` — text-embedding-3-small wrapper
-- [x] (2) [NAHIDE] Hybrid search query (vector + filter + re-rank)
-- [x] (2) [NAHIDE] HNSW index optimize parametreleri
+### 1. Hizmetleri Başlat
+```bash
+docker-compose up -d
+```
 
-### SSE Streaming
-- [x] (2) [ŞEYMA] LangGraph stream → SSE event mapping
-- [x] (2) [ŞEYMA] SSE event tipleri (agent_start, complete, error, done)
+### 2. Backend (Terminal 1)
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
 
-### Smart Contract
-- [x] (2) [NAHIDE] `sponsor` instruction + Sponsorship PDA oluşturma
-- [x] (2) [NAHIDE] `release_funds` instruction (backend authority)
-- [x] (2) [NAHIDE] `refund_sponsor` instruction
-- [x] (2) [NAHIDE] `emit!` events (GoalFunded, GoalReleased)
-- [x] (2) [NAHIDE] Anchor IDL export (frontend için)
-- [ ] (2) [NAHIDE] Devnet deploy, program ID kayıt
+### 3. Frontend (Terminal 2)
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-### Solana Service (Python)
-- [x] (2) [NAHIDE] `solana_service.py` — RPC wrapper
-- [x] (2) [NAHIDE] `initialize_goal` backend'den çağırma
-- [x] (2) [NAHIDE] `release_funds` backend'den çağırma
-- [x] (2) [NAHIDE] Solana event listener (WebSocket subscription)
+### 4. Demo
+`http://localhost:3000` ziyaret et → "✨ AI Planlama Başlat" tıkla → Formu doldur → Gerçek zamanlı AI analizini izle
 
-### Frontend Pages
-- [ ] (2) [BEYZANUR] Landing page (`/`) — trending goals feed
-- [ ] (2) [BEYZANUR] `GoalCard.tsx` — feed item component
-- [ ] (2) [BEYZANUR] `GoalProgress.tsx` — progress bar + sponsor count
-- [ ] (2) [BEYZANUR] `/create` page — form (react-hook-form + zod)
-- [ ] (2) [BEYZANUR] **`AgentStreamPanel.tsx`** — SSE consume (KRİTİK)
-- [ ] (2) [BEYZANUR] Framer Motion animasyonları (agent kartları)
-- [ ] (2) [BEYZANUR] `/goals/[id]` page — tabs (Plan/Sponsorlar/Fiyat)
-- [ ] (2) [BEYZANUR] `SponsorModal.tsx` — Phantom popup tetikleme
-- [ ] (2) [BEYZANUR] `FinalReportRenderer.tsx` — markdown render
-- [ ] (2) [BEYZANUR] `RouteMap.tsx` — Mapbox component
-- [ ] (2) [BEYZANUR] `/routes/search` page — search bar + filters
-- [ ] (2) [BEYZANUR] `RouteResultCard.tsx` + `RouteCopyButton.tsx`
-- [ ] (2) [BEYZANUR] Zustand store'ları (wallet, goal, notification)
-- [ ] (2) [BEYZANUR] TanStack Query hooks (useGoal, useGoalsList, useRouteSearch)
+---
 
-## Faz 3: Integration Checkpoint-1 (Saat 20-24)
+## 📊 Mimari
 
-- [ ] (3) [ŞEYMA+BEYZANUR] Frontend ↔ Backend SSE bağlantı testi
-- [ ] (3) [ŞEYMA+NAHIDE] Backend ↔ Agents gerçek API testi (Amadeus + OpenAI)
-- [ ] (3) [NAHIDE+BEYZANUR] Frontend ↔ Smart Contract (Phantom tx)
-- [ ] (3) [ŞEYMA+NAHIDE] Backend ↔ Smart Contract event listener sync
-- [ ] (3) [ÜÇÜ] End-to-end happy path: create → sponsor → release ✅
+```
+Frontend (Next.js)
+    ↓ HTTP/SSE
+Backend (FastAPI)
+    ├─ Rota Ajanı (Google Maps + LLM)
+    ├─ Fırsat Avcısı (Amadeus API + LLM)
+    └─ Bütçe Ajanı (Maliyet hesaplama + LLM ipuçları)
+    ↓
+Veritabanı (PostgreSQL + pgvector)
+    └─ SeyahatHedefleri, Sponsorluklar, AjanKayıtları, Rotalar
 
-## Faz 4: Feature Completion (Saat 24-36)
+Akıllı Kontrat (Solana)
+    ├─ initialize_goal (PDA oluşturma)
+    ├─ sponsor (fon transferi)
+    ├─ release_funds (escrow dağıtımı)
+    └─ refund_sponsor (geri ödeme)
+```
 
-### Backend
-- [ ] (4) [ŞEYMA] Error handling + retry policy detaylandırma
-- [ ] (4) [ŞEYMA] Prompt fine-tuning — 10 test goal üzerinde halüsinasyon kontrolü
-- [ ] (4) [ŞEYMA] `price_history` doldurma logic'i (goal create + Celery)
-- [ ] (4) [ŞEYMA] Celery worker — Fırsat Avcısı periyodik (30sn demo, 1h prod)
-- [ ] (4) [ŞEYMA] WebSocket push: fiyat düşüşü → frontend modal
-- [ ] (4) [ŞEYMA] Final report markdown polish (emoji, tablo, başlıklar)
+---
 
-### Database & DevOps
-- [ ] (4) [NAHIDE] Seed data script: 20-30 fake route + embedding
-- [ ] (4) [NAHIDE] Redis cache warming script (demo rotaları)
-- [ ] (4) [NAHIDE] Multiple sponsor PDA testi (5 wallet, aynı goal)
-- [ ] (4) [NAHIDE] Demo wallet'ları hazırlama (5 adet, faucet'tan SOL)
-- [ ] (4) [NAHIDE] Solana Explorer link helper (frontend'e gömülecek)
+## 🤖 AI Ajan Akışı
 
-### Frontend
-- [ ] (4) [BEYZANUR] **`PriceChart.tsx`** — Recharts ile fiyat tarihçesi
-- [ ] (4) [BEYZANUR] Buy signal badge + annotation
-- [ ] (4) [BEYZANUR] **`DealNotificationModal.tsx`** — Human-in-the-loop
-- [ ] (4) [BEYZANUR] `/profile/[wallet]` page
-- [ ] (4) [BEYZANUR] Route copy akışı end-to-end
-- [ ] (4) [BEYZANUR] Loading/error/empty states (tüm sayfalarda)
-- [ ] (4) [BEYZANUR] Toast bildirimleri (sonner)
+1. **Rota Ajanı**: Seyahat rotasını Google Maps + LLM içgörüleri ile analiz eder
+2. **Fırsat Avcısı**: En iyi uçuşları (Amadeus) + otelleri bulur, değerlendirme sağlar
+3. **Bütçe Ajanı**: Toplam maliyeti hesaplar, para tasarrufu ipuçları üretir
+4. **Son Rapor**: Tüm ajan çıktılarının Markdown derlemesi
 
-## Faz 5: Integration Checkpoint-2 (Saat 36-40)
+→ **Hepsi SSE aracılığıyla gerçek zamanlı frontend'e aktarılır**
 
-- [ ] (5) [ÜÇÜ] Full demo akışı baştan sona × 2 deneme
-- [ ] (5) [ÜÇÜ] Edge case testleri (Phantom red, Amadeus timeout, SSE kopması)
-- [ ] (5) [NAHIDE] Demo wallet bakiyelerini kontrol & faucet refresh
-- [ ] (5) [ÜÇÜ] Bug fixing buffer
+---
 
-## Faz 6: Polish & Demo Prep (Saat 40-48)
+## ⛓️ Solana Entegrasyonu
 
-- [ ] (6) [BEYZANUR] UI polish — tüm ekranların görsel review'u
-- [ ] (6) [BEYZANUR] Dicebear avatar entegrasyonu (wallet'tan deterministic)
-- [ ] (6) [BEYZANUR] Cover image'lar (Unsplash, 4-5 görsel)
-- [ ] (6) [ÜÇÜ] Demo video çekimi (3-5 dk, yedek)
-- [ ] (6) [ŞEYMA] `docs/architecture.md` finalize (mimari diyagramları)
-- [ ] (6) [BEYZANUR] `docs/demo-script.md` finalize (5 dk senaryo)
-- [ ] (6) [ŞEYMA] Sunum slaytları — jüri kriterleri eşlemesi
-- [ ] (6) [ÜÇÜ] Demo provası × 2
-- [ ] (6) [ÜÇÜ] Pre-demo checklist uygula
-- [ ] (6) [NAHIDE] Backup laptop hazır, mobile hotspot test
-- [ ] (6) [NAHIDE] Backend production mode (`uvicorn --workers 2`)
-- [ ] (6) [BEYZANUR] Frontend prod build (`next build`)
-- [ ] (6) [ÜÇÜ] Phantom auto-approve KAPALI doğrula
+### Akıllı Kontrat Özellikleri
+- **Yetkilendirmeye dayalı onay** güvenli fon serbest bırakma için
+- **PDA tabanlı escrow** (hiçbir vedi riski yok)
+- **Olay yayınlama** (HedefFonlandı, HedefSerbest)
+- **Çoklu sponsor desteği** (hedef başına birden fazla katkı)
 
-## Cut List (Saat 30+ Panik Senaryosu)
+### İş Akışı
+```
+1. Hedefi Başlat (backend → blockchain)
+2. Sponsor (topluluk üyeleri fon sağlar)
+3. Onayla (yetkilendirme release_funds'ı tetikler)
+4. Serbest Bırak (fonlar → gezgin cüzdanı)
+```
 
-> Sırasıyla atılabilir (en az önemliden en kritiğe):
+---
 
-- [ ] (CUT) Mobile responsive
-- [ ] (CUT) Sosyal Rota Ağı semantic search → keyword filter'a düş
-- [ ] (CUT) Route copy fonksiyonel akış (UI kalsın)
-- [ ] (CUT) Refund flow UI
-- [ ] (CUT) `/profile/[wallet]` page
-- [ ] (CUT) Fiyat grafiği gerçek data → statik SVG fallback
-- [ ] (CUT) WebSocket → polling fallback
+## 🔍 Temel Teknik Özellikler
 
-## ASLA ATILMAYACAKLAR
+| Özellik | Teknoloji | Detaylar |
+|---------|-----------|----------|
+| **Vektör Arama** | pgvector + OpenAI | 1536-boyutlu embeddings, HNSW indexing |
+| **Ajan Kaydı** | SQLAlchemy | Her ajan için çalıştırma zamanı + I/O |
+| **Gerçek Zamanlı Güncellemeler** | SSE | Canlı ajan ilerleme streaming |
+| **API Çerçevesi** | FastAPI | Otomatik Swagger dokümentasyonu |
+| **Akıllı Kontrat** | Anchor + Rust | 4 talimat, 2 olay, PDA'lar |
+| **Veritabanı** | PostgreSQL 16 | Async SQLAlchemy + Alembic migrasyonları |
+| **Frontend** | Next.js 15 | TypeScript, React Query, Tailwind |
 
-- AgentStreamPanel + SSE
-- Smart Contract init + sponsor + release
-- Final report (Agentic AI çıktısı)
-- Phantom integration
+---
+
+## 📁 Proje Yapısı
+
+```
+TravelToken/
+├── backend/
+│   ├── app/
+│   │   ├── agents/        # 3 AI ajanı + orkestrasyoncu
+│   │   ├── api/routes/    # 8 uç nokta
+│   │   ├── models/        # SQLAlchemy + Pydantic
+│   │   ├── services/      # Harici API'ler
+│   │   └── main.py
+│   └── alembic/           # Migrasyonlar
+├── contracts/
+│   └── programs/travel_escrow/src/
+│       ├── instructions/  # 4 talimat
+│       ├── state.rs       # PDA'lar
+│       └── lib.rs         # Program
+├── frontend/
+│   ├── src/app/           # Next.js sayfaları
+│   └── src/components/    # React bileşenleri
+├── idl/
+│   └── travel_escrow.json # Akıllı kontrat IDL'i
+└── docker-compose.yml
+```
+
+---
+
+## 🎬 API Uç Noktaları
+
+| Yöntem | Uç Nokta | Amaç |
+|--------|----------|------|
+| POST | `/api/goals/create` | Hedef oluştur + AI analizini stream et |
+| GET | `/api/goals/{id}` | Hedef getir |
+| GET | `/api/goals/list/by-wallet` | Kullanıcı hedeflerini listele |
+| POST | `/api/sponsorships/create` | Sponsor ekle |
+| GET | `/api/routes/search` | Hibrit rota arama |
+| POST | `/api/routes/{id}/copy` | Rotayı kopyala |
+| WS | `/ws/notifications/{wallet}` | Gerçek zamanlı güncellemeler |
+| POST | `/api/agents/approve-purchase` | Solana'da fonları serbest bırak |
+
+---
+
+## 💡 İnovasyon Noktaları
+
+1. **Ajanlar + Blockchain**: LLM ajanları Solana escrow ile orkestrasyonu
+2. **Hibrit Arama**: Vektör benzerliği (embeddings) + anahtar kelime eşleştirmesi
+3. **Gerçek Zamanlı Streaming**: Kullanıcılar AI'nin "düşünüşünü" SSE aracılığıyla izler
+4. **Güvensiz Escrow**: PDA'lar aracı riskini ortadan kaldırır
+5. **Modüler Tasarım**: Ajanlar, hizmetler, API'nin açık ayrımı
+
+---
+
+## 👥 Takım
+
+- **Şeyma**: Backend (FastAPI, ajanlar, API, Solana)
+- **Ceylin**: Altyapı (DB, migrasyonlar, akıllı kontrat)
+- **Irmak**: Frontend (Next.js, UI, UX)
+
+---
+
+## 📚 Belgeler
+
+- **Görev Dağılımı & İlerleme**: [TASK_DISTRIBUTION.md](TASK_DISTRIBUTION.md) dosyasına bak
+- **API Dokümentasyonu**: `http://localhost:8000/docs` (otomatik oluşturulur)
+- **Akıllı Kontrat IDL'i**: `idl/travel_escrow.json`
+
+---
+
+## 🔗 Bağlantılar
+
+- **Solana Programı**: `programs/travel_escrow/src/`
+- **Devnet Explorer**: https://explorer.solana.com/?cluster=devnet
+- **GitHub**: https://github.com/ceylindilekkarabulut/TravelToken
+
+---
+
+**Hackathon'26 için geliştirildi • Faz 2 Tamamlandı • MVP Hazır**
