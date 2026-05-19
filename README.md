@@ -41,6 +41,11 @@ Throne Travel, öğrenci gezginlerin hayallerini gerçeğe dönüştürmek için
 - ✅ **Gerçek Zamanlı Hedef Oluşturma** streaming yanıtları ile
 
 ---
+<img width="941" height="435" alt="image" src="https://github.com/user-attachments/assets/b7481581-c8e2-436c-8648-7cf0395fa3e8" />
+<img width="956" height="357" alt="image" src="https://github.com/user-attachments/assets/f7f1f2be-e3ef-40a3-a199-e678f36b2733" />
+
+
+---
 
 ## 🚀 Hızlı Başlangıç
 
